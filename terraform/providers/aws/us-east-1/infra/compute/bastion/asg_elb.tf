@@ -52,7 +52,8 @@ module "bastion_asg" {
 }
 
 module "bastion_elb" {
-  source = "github.com/hatemosphere/terraform-aws-elb?ref=v2.0.0-1"
+  source  = "terraform-aws-modules/elb/aws"
+  version = "2.1.0"
 
   name = "bastion-elb"
 
