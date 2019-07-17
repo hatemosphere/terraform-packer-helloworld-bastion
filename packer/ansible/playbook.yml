@@ -1,0 +1,8 @@
+---
+
+- hosts: all
+  become: true
+  vars: []
+  roles:
+  - ubuntu-18.04-ssh-bastion-role
+

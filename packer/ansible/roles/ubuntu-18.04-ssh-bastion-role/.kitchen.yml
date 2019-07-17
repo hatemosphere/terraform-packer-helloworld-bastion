@@ -1,0 +1,22 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  hosts: test-kitchen
+  name: ansible_playbook
+  ansible_connection: ssh
+  require_chef_for_busser: false
+  require_ruby_for_busser: false
+  ansible_version: 2.8.2-1ppa~bionic
+  ansible_host_key_checking: false
+  ansible_verbosity: 2
+  ansible_verbose: true
+
+platforms:
+  - name: ubuntu/bionic64
+    driver:
+      box: ubuntu/bionic64
+
+suites:
+  - name: default

@@ -1,0 +1,68 @@
+{
+  "variables": {
+    "ansible_dir": "ansible",
+    "region": "{{env `PACKER_AWS_REGION`}}",
+    "vpc_id": "{{env `PACKER_AWS_VPC_ID`}}",
+    "subnet_id": "{{env `PACKER_AWS_SUBNET_ID`}}",
+    "security_group_id": "{{env `PACKER_AWS_SECURITY_GROUP_ID`}}",
+    "instance_type": "{{env `PACKER_AWS_INSTANCE_TYPE`}}",
+    "build_name": "ubuntu-18.04-ssh-bastion",
+    "build_ref": "{{env `PACKER_BUILD_REF`}}",
+    "build_id": "{{isotime \"20060102150405\"}}"
+  },
+  "builders": [
+    {
+      "name": "ubuntu-18.04",
+      "type": "amazon-ebs",
+      "region": "{{user `region`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "associate_public_ip_address": false,
+      "security_group_id": "{{ user `security_group_id`}}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*",
+          "root-device-type": "ebs",
+          "state": "available"
+        },
+        "owners": ["099720109477"],
+        "most_recent": true
+      },
+      "spot_price": "auto",
+      "spot_price_auto_product": "Linux/UNIX (Amazon VPC)",
+      "instance_type": "{{user `instance_type`}}",
+      "ssh_interface": "private_ip",
+      "ssh_username": "ubuntu",
+      "ami_name": "{{ user `build_name` }}-{{ user `build_ref` }}-{{ user `build_id` }}",
+      "run_tags": {
+        "Name": "{{ user `build_name` }}-{{ user `build_ref` }}-{{ user `build_id` }}",
+        "Packer": "true"
+      },
+      "tags": {
+        "Name": "{{ user `build_name` }}",
+        "build_name": "{{ user `build_name` }}",
+        "build_ref": "{{ user `build_ref` }}",
+        "build_id": "{{ user `build_id` }}",
+        "source_ami": "{{.SourceAMI}}"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "extra_arguments": [
+        "--extra-vars",
+        "ansible_python_interpreter=/usr/bin/python3"
+      ],
+      "user": "ubuntu",
+      "playbook_file": "{{user `ansible_dir`}}/playbook.yml"
+    },
+    {
+      "type": "shell",
+      "execute_command": "{{.Vars}} sudo -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh"
+    }
+  ]
+}
+

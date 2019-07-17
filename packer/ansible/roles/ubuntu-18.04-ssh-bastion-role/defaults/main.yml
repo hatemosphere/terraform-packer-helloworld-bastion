@@ -1,0 +1,4 @@
+---
+base_packages:
+  - python3
+  - openssh-server
