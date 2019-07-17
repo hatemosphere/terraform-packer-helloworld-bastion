@@ -1,0 +1,34 @@
+package:
+  openssh-server:
+    installed: true
+  ufw:
+    installed: true
+
+port:
+  tcp:22:
+    listening: true
+    ip:
+    - 0.0.0.0
+
+service:
+  sshd:
+    enabled: true
+    running: true
+  ufw:
+    enabled: true
+    running: true
+
+command:
+  ufw status verbose:
+    exit-status: 0
+    stdout:
+    - 'Status: active'
+    - 'Logging: on (low)'
+    - 'Default: deny (incoming), allow (outgoing), disabled (routed)'
+    - 'New profiles: skip'
+    - To                         Action      From
+    - --                         ------      ----
+    - 22/tcp                     LIMIT IN    Anywhere
+    - 22/tcp (v6)                LIMIT IN    Anywhere (v6)
+    stderr: []
+    timeout: 10000

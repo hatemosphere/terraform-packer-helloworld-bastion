@@ -1,9 +1,12 @@
 ---
-- name: Ensure base packages are installed and updated
+- name: Install/update base packages
   apt:
     name: "{{ base_packages }}"
     state: latest
     update_cache: yes
+
+- name: Include ufw for firewall configuration
+  include_tasks: 'ufw.yml'
 
 - name: Remove useless packages from the cache
   apt:
@@ -13,5 +16,3 @@
   apt:
     autoremove: yes
 
-- name: Include ufw for firewall configuration
-  include_tasks: 'ufw.yml'

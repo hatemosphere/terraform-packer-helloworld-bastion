@@ -59,6 +59,14 @@
       "playbook_file": "{{user `ansible_dir`}}/playbook.yml"
     },
     {
+      "type": "goss",
+      "tests": [
+        "goss/goss.yaml"
+      ],
+      "use_sudo": true,
+      "format": "documentation"
+    },
+    {
       "type": "shell",
       "execute_command": "{{.Vars}} sudo -E bash '{{.Path}}'",
       "script": "scripts/cleanup.sh"
