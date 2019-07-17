@@ -107,7 +107,7 @@ Inject AWS credentials with permissions to run Terraform in any convenient way s
 
 ---
 
-Apply that darn thing:
+Apply that darn thing at last:
 
 ```bash
 teraform init
