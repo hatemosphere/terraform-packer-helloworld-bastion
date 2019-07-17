@@ -27,6 +27,6 @@ module "sns-email-topic" {
   source  = "github.com/koalificationio/tf-sns-email-list?ref=0.0.1"
 
   display_name    = "CloudWatch Bastion SSH ELB Alerts"
-  email_addresses = ["admin@example.com"]
+  email_addresses = local.alert_subscribers
   stack_name      = "bastion-ssh-alerts-sns-stack"
 }
